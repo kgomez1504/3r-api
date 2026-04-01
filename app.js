@@ -9,7 +9,7 @@ app.use(cors());
 const config = {
   user: "sa3R",
   password: "Mauricio2004",
-  server: "191.98.160.84",
+  server: "caleb.pe",
   port: 1433,
   database: "GesNube",
   options: {
