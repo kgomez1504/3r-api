@@ -34,21 +34,14 @@ app.get("/api/test-db", async (req, res) => {
 });
 
 // =====================================
-//   RUTA 1: STOCK
+//   RUTA 1: STOCK (TODAS LAS COLUMNAS)
 // =====================================
 app.get("/api/stock", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT 
-        Codigo,
-        Articulo,
-        Almacen,
-        Stock,
-        CostoPromedioSoles,
-        CostoPromedioDolares,
-        EnTransito
+      SELECT *
       FROM dbo.AlmCuboStock
       WHERE EmpresaId = 22
         AND Almacen = 'Principal'
@@ -63,25 +56,14 @@ app.get("/api/stock", async (req, res) => {
 });
 
 // =====================================
-//   RUTA 2: ARTÍCULOS
+//   RUTA 2: ARTÍCULOS (TODAS LAS COLUMNAS)
 // =====================================
 app.get("/api/articulos", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT 
-        Codigo,
-        Articulo,
-        CodigoParte,
-        MarcaArticulo,
-        Familia,
-        Clase,
-        SubClase,
-        Laboratorio,
-        PesoNeto,
-        Origen,
-        Fabricante
+      SELECT *
       FROM dbo.AlmCuboArticulos3R
       WHERE EmpresaId = 22
     `);
@@ -95,9 +77,30 @@ app.get("/api/articulos", async (req, res) => {
 });
 
 // =====================================
+//   RUTA 3: COTIZACIONES (TODAS LAS COLUMNAS)
+// =====================================
+app.get("/api/cotizaciones", async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+
+    const result = await pool.request().query(`
+      SELECT *
+      FROM dbo.VenCuboArticuloxCotizacion3R
+      WHERE EmpresaId = 22
+    `);
+
+    res.json(result.recordset);
+
+  } catch (err) {
+    console.error("ERROR API COTIZACIONES:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// =====================================
 //   INICIAR SERVIDOR
 // =====================================
-const PORT = 4000; // <-- puerto para ngrok
+const PORT = 4000;
 app.listen(PORT, () => {
   console.log("API escuchando en puerto " + PORT);
 });
