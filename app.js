@@ -77,14 +77,16 @@ app.get("/api/articulos", async (req, res) => {
 });
 
 // =====================================
-//   RUTA 3: COTIZACIONES (TODAS LAS COLUMNAS)
+//   RUTA 3: COTIZACIONES (FECHA FORMATEADA)
 // =====================================
 app.get("/api/cotizaciones", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT *
+      SELECT 
+        *,
+        FORMAT(FechaCotizacion, 'dd/MM/yyyy') AS FechaCotizacionFormateada
       FROM dbo.VenCuboArticuloxCotizacion
       WHERE EmpresaId = 22
     `);
