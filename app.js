@@ -92,13 +92,12 @@ app.get("/api/cotizaciones", async (req, res) => {
     const result = await pool.request().query(`
       SELECT
         t.*,
-        CONVERT(VARCHAR(10), t.FechaCotizacion, 103) AS FechaCotizacionFormateada
+        CONVERT(VARCHAR(10), t.FechaCotizacion, 23) AS FechaCotizacionFormateada
       FROM dbo.VenCuboArticuloxCotizacion3R t
       WHERE t.EmpresaId = 22
       ORDER BY t.FechaCotizacion ASC
     `);
 
-    // Reemplazar la fecha original por la formateada
     const data = result.recordset.map(row => {
       row.FechaCotizacion = row.FechaCotizacionFormateada;
       delete row.FechaCotizacionFormateada;
@@ -112,7 +111,6 @@ app.get("/api/cotizaciones", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // =====================================
 //   RUTA 4: CLIENTES (equivalente a tu Power Query)
