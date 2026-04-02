@@ -84,21 +84,28 @@ app.get("/api/cotizaciones", async (req, res) => {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT 
-        *,
-        CONVERT(VARCHAR(10), FechaCotizacion, 103) AS FechaCotizacionFormateada
+      SELECT
+        -- Reemplazamos la fecha original por la formateada
+        CONVERT(VARCHAR(10), FechaCotizacion, 103) AS FechaCotizacion,
+        -- Seleccionamos todas las demás columnas
+        *
       FROM dbo.VenCuboArticuloxCotizacion
       WHERE EmpresaId = 22
     `);
 
-    res.json(result.recordset);
+    // Quitamos la columna duplicada FechaCotizacion original
+    const data = result.recordset.map(row => {
+      delete row.FechaCotizacion1; // por si SQL crea alias
+      return row;
+    });
+
+    res.json(data);
 
   } catch (err) {
     console.error("ERROR API COTIZACIONES:", err);
     res.status(500).json({ error: err.message });
   }
 });
-
 // =====================================
 //   RUTA 4: CLIENTES (equivalente a tu Power Query)
 // =====================================
