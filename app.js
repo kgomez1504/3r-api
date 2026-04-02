@@ -98,6 +98,39 @@ app.get("/api/cotizaciones", async (req, res) => {
 });
 
 // =====================================
+//   RUTA 4: CLIENTES (equivalente a tu Power Query)
+// =====================================
+app.get("/api/clientes", async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+
+    const result = await pool.request().query(`
+      SELECT
+        Codigo,
+        Cliente,
+        Activo,
+        Vendedor,
+        TipoCliente,
+        FormaCobro,
+        Direccion,
+        Sede,
+        Distrito,
+        Provincia,
+        Departamento,
+        FechaModificacion
+      FROM dbo.VenCuboClientes
+      WHERE EmpresaId = 22
+    `);
+
+    res.json(result.recordset);
+
+  } catch (err) {
+    console.error("ERROR API CLIENTES:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// =====================================
 //   INICIAR SERVIDOR
 // =====================================
 const PORT = 4000;
