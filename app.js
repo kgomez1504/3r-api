@@ -91,18 +91,19 @@ app.get("/api/cotizaciones", async (req, res) => {
 
     const result = await pool.request().query(`
       SELECT
-        -- Reemplazamos la fecha original por la formateada
-        CONVERT(VARCHAR(10), FechaCotizacion, 103) AS FechaCotizacion,
-        -- Seleccionamos todas las demás columnas
-        *
+        -- Todas las columnas originales
+        *,
+        -- Fecha formateada con el MISMO nombre
+        CONVERT(VARCHAR(10), FechaCotizacion, 103) AS FechaCotizacionFormateada
       FROM dbo.VenCuboArticuloxCotizacion3R
       WHERE EmpresaId = 22
-      ORDER BY FechaCotizacion ASC  -- más antiguo → más reciente
+      ORDER BY FechaCotizacion ASC
     `);
 
-    // Eliminamos la columna duplicada FechaCotizacion1 si aparece
+    // Reemplazar la fecha original por la formateada
     const data = result.recordset.map(row => {
-      delete row.FechaCotizacion1;
+      row.FechaCotizacion = row.FechaCotizacionFormateada;
+      delete row.FechaCotizacionFormateada;
       return row;
     });
 
@@ -113,8 +114,6 @@ app.get("/api/cotizaciones", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
 // =====================================
 //   RUTA 4: CLIENTES (equivalente a tu Power Query)
 // =====================================
