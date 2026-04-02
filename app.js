@@ -85,7 +85,7 @@ app.get("/api/cotizaciones", async (req, res) => {
 
     const result = await pool.request().query(`
       SELECT *
-      FROM dbo.VenCuboArticuloxCotizacion3R
+      FROM dbo.VenCuboArticuloxCotizacion
       WHERE EmpresaId = 22
     `);
 
