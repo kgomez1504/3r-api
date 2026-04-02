@@ -77,7 +77,7 @@ app.get("/api/articulos", async (req, res) => {
 });
 
 // =====================================
-//   RUTA 3: COTIZACIONES (FECHA FORMATEADA)
+//   RUTA 3: COTIZACIONES (FECHA FORMATEADA + ORDENADA)
 // =====================================
 app.get("/api/cotizaciones", async (req, res) => {
   try {
@@ -91,11 +91,12 @@ app.get("/api/cotizaciones", async (req, res) => {
         *
       FROM dbo.VenCuboArticuloxCotizacion
       WHERE EmpresaId = 22
+      ORDER BY FechaCotizacion ASC  -- más antiguo → más reciente
     `);
 
-    // Quitamos la columna duplicada FechaCotizacion original
+    // Eliminamos la columna duplicada FechaCotizacion1 si aparece
     const data = result.recordset.map(row => {
-      delete row.FechaCotizacion1; // por si SQL crea alias
+      delete row.FechaCotizacion1;
       return row;
     });
 
@@ -106,6 +107,8 @@ app.get("/api/cotizaciones", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
 // =====================================
 //   RUTA 4: CLIENTES (equivalente a tu Power Query)
 // =====================================
