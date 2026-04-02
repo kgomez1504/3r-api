@@ -87,7 +87,7 @@ app.get("/api/cotizaciones", async (req, res) => {
       SELECT 
         *,
         FORMAT(FechaCotizacion, 'dd/MM/yyyy') AS FechaCotizacionFormateada
-      FROM dbo.VenCuboArticuloxCotizacion
+      FROM dbo.VenCuboArticuloxCotizacion3R
       WHERE EmpresaId = 22
     `);
 
