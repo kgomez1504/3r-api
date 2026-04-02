@@ -86,8 +86,8 @@ app.get("/api/cotizaciones", async (req, res) => {
     const result = await pool.request().query(`
       SELECT 
         *,
-        FORMAT(FechaCotizacion, 'dd/MM/yyyy') AS FechaCotizacionFormateada
-      FROM dbo.VenCuboArticuloxCotizacion3R
+        CONVERT(VARCHAR(10), FechaCotizacion, 103) AS FechaCotizacionFormateada
+      FROM dbo.VenCuboArticuloxCotizacion
       WHERE EmpresaId = 22
     `);
 
