@@ -34,14 +34,20 @@ app.get("/api/test-db", async (req, res) => {
 });
 
 // =====================================
-//   RUTA 1: STOCK (TODAS LAS COLUMNAS)
+//   RUTA 1: STOCK (equivalente a tu Power Query)
 // =====================================
 app.get("/api/stock", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT *
+      SELECT
+        Codigo,
+        Stock,
+        CostoPromedioSoles,
+        CostoPromedioDolares,
+        EnTransito,
+        Almacen
       FROM dbo.AlmCuboStock
       WHERE EmpresaId = 22
         AND Almacen = 'Principal'
