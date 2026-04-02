@@ -89,7 +89,7 @@ app.get("/api/cotizaciones", async (req, res) => {
         CONVERT(VARCHAR(10), FechaCotizacion, 103) AS FechaCotizacion,
         -- Seleccionamos todas las demás columnas
         *
-      FROM dbo.VenCuboArticuloxCotizacion
+      FROM dbo.VenCuboArticuloxCotizacion3R
       WHERE EmpresaId = 22
       ORDER BY FechaCotizacion ASC  -- más antiguo → más reciente
     `);
