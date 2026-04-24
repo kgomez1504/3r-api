@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Precios</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Calculadora de Precios</h2>
+
+<label>Costo:</label>
+<input id="costo" type="number" placeholder="Ej: 100">
+
+<label>Margen (%):</label>
+<input id="margen" type="number" placeholder="Ej: 20">
+
+<button onclick="calcular()">Calcular</button>
+
+<h3 id="resultado"></h3>
+
+<!-- Librería de Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // 🔴 PEGA AQUÍ TUS DATOS DE SUPABASE
+  const supabaseUrl = "https://pkkblvultuuzgnuxxajs.supabase.co";
+const supabaseKey = "sb_publishable_kwU5idsCkhnhGYzmgE2B7Q_dvRxU1gU";
+
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function calcular() {
+    let costo = parseFloat(document.getElementById("costo").value);
+    let margen = parseFloat(document.getElementById("margen").value);
+
+    // Validación básica
+    if (isNaN(costo) || isNaN(margen)) {
+      alert("Por favor ingresa valores válidos");
+      return;
+    }
+
+    let precio = costo + (costo * margen / 100);
+
+    document.getElementById("resultado").innerText =
+      "Precio final: " + precio.toFixed(2);
+
+    // Guardar en Supabase
+    const { data, error } = await supabaseClient
+      .from('productos')
+      .insert([
+        {
+          costo: costo,
+          margen: margen,
+          precio_final: precio
+        }
+      ]);
+
+    if (error) {
+      console.error("Error completo:", error);
+      alert("Error: " + error.message);
+    } else {
+      console.log("Guardado correctamente");
+    }
+  }
+</script>
+
+</body>
+</html>
