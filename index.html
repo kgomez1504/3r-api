@@ -53,13 +53,11 @@
   <p id="msg"></p>
 </div>
 
-<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // 🔴 DATOS CORRECTOS DE SUPABASE
-  const supabaseUrl = "https://pkkblvultuuzgnuxxajs.supabase.co"; // SIN /rest/v1/
-  const supabaseKey = "TU_PUBLISHABLE_KEY_AQUI";
+  const supabaseUrl = "https://pkkblvultuuzgnuxxajs.supabase.co";
+  const supabaseKey = "sb_publishable_kwU5idsCkhnhGYzmgE2B7Q_dvRxU1gU";
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
   async function login() {
@@ -71,16 +69,14 @@
       return;
     }
 
-    // 🔍 Buscar usuario en Supabase
     const { data, error } = await supabaseClient
       .from("Usuarios3R")
-      .select("*")
+      .select("Nombre")
       .eq("Correo", correo)
       .eq("Contraseña", pass)
       .maybeSingle();
 
     if (error) {
-      console.error(error);
       document.getElementById("msg").innerText = "Error en el servidor";
       return;
     }
@@ -90,10 +86,7 @@
       return;
     }
 
-    // ✔ Usuario válido
     alert("Bienvenido " + data.Nombre);
-
-    // Redirigir a la app
     window.location.href = "app.html";
   }
 </script>
