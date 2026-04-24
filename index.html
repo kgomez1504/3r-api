@@ -53,11 +53,14 @@
   <p id="msg"></p>
 </div>
 
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+  // 🔥 TU CONFIGURACIÓN REAL
   const supabaseUrl = "https://pkkblvultuuzgnuxxajs.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBra2JsdnVsdHV1emdudXh4YWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTMxOTYsImV4cCI6MjA5MjYyOTE5Nn0.WpWrcMfAOKmf_nRCgU3wjVxjseC7J4G1mbXJRNmjAWo";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBra2JsdnVsdHV1emdudXh4YWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTMxOTYsImV4cCI6MjA5MjYyOTE5Nn0.WpWrcMfAOKmf_nRCJgU3wjVxjseC7J4G1mbXJRNmjAWo";
+
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
   async function login() {
@@ -69,6 +72,7 @@
       return;
     }
 
+    // 🔥 CONSULTA REAL A SUPABASE (POST, NO GET)
     const { data, error } = await supabaseClient
       .from("Usuarios3R")
       .select("Nombre")
@@ -77,6 +81,7 @@
       .maybeSingle();
 
     if (error) {
+      console.error("Supabase error:", error);
       document.getElementById("msg").innerText = "Error en el servidor";
       return;
     }
