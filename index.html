@@ -57,10 +57,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // 🔥 TU CONFIGURACIÓN REAL
+  // CONFIGURACIÓN REAL Y FUNCIONAL
   const supabaseUrl = "https://pkkblvultuuzgnuxxajs.supabase.co";
   const supabaseKey = "sb_publishable_kwU5idsCkhnhGYzmgE2B7Q_dvRxU1gU";
-
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
   async function login() {
@@ -72,7 +71,7 @@
       return;
     }
 
-    // 🔥 CONSULTA REAL A SUPABASE (POST, NO GET)
+    // CONSULTA REAL A SUPABASE (POST, NO GET)
     const { data, error } = await supabaseClient
       .from("Usuarios3R")
       .select("Nombre")
