@@ -2,83 +2,99 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Calculadora de Precios</title>
-
+  <title>Iniciar Sesión</title>
   <style>
     body {
       font-family: Arial;
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
-
-    input, button {
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 300px;
+      text-align: center;
+    }
+    input {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
-
     button {
+      width: 100%;
+      padding: 10px;
+      background: black;
+      color: white;
+      border: none;
       cursor: pointer;
+      border-radius: 5px;
+    }
+    #msg {
+      color: red;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-<h2>Calculadora de Precios</h2>
+<div class="login-box">
+  <h2>Acceso</h2>
+  <input id="user" type="text" placeholder="Correo">
+  <input id="pass" type="password" placeholder="Contraseña">
+  <button onclick="login()">Entrar</button>
+  <p id="msg"></p>
+</div>
 
-<label>Costo:</label>
-<input id="costo" type="number" placeholder="Ej: 100">
-
-<label>Margen (%):</label>
-<input id="margen" type="number" placeholder="Ej: 20">
-
-<button onclick="calcular()">Calcular</button>
-
-<h3 id="resultado"></h3>
-
-<!-- Librería de Supabase -->
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // 🔴 PEGA AQUÍ TUS DATOS DE SUPABASE
-  const supabaseUrl = "https://pkkblvultuuzgnuxxajs.supabase.co";
-const supabaseKey = "sb_publishable_kwU5idsCkhnhGYzmgE2B7Q_dvRxU1gU";
-
+  // 🔴 DATOS CORRECTOS DE SUPABASE
+  const supabaseUrl = "https://pkkblvultuuzgnuxxajs.supabase.co"; // SIN /rest/v1/
+  const supabaseKey = "TU_PUBLISHABLE_KEY_AQUI";
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-  async function calcular() {
-    let costo = parseFloat(document.getElementById("costo").value);
-    let margen = parseFloat(document.getElementById("margen").value);
+  async function login() {
+    const correo = document.getElementById("user").value.trim();
+    const pass = document.getElementById("pass").value.trim();
 
-    // Validación básica
-    if (isNaN(costo) || isNaN(margen)) {
-      alert("Por favor ingresa valores válidos");
+    if (!correo || !pass) {
+      document.getElementById("msg").innerText = "Completa todos los campos";
       return;
     }
 
-    let precio = costo + (costo * margen / 100);
-
-    document.getElementById("resultado").innerText =
-      "Precio final: " + precio.toFixed(2);
-
-    // Guardar en Supabase
+    // 🔍 Buscar usuario en Supabase
     const { data, error } = await supabaseClient
-      .from('productos')
-      .insert([
-        {
-          costo: costo,
-          margen: margen,
-          precio_final: precio
-        }
-      ]);
+      .from("Usuarios3R")
+      .select("*")
+      .eq("Correo", correo)
+      .eq("Contraseña", pass)
+      .maybeSingle();
 
     if (error) {
-      console.error("Error completo:", error);
-      alert("Error: " + error.message);
-    } else {
-      console.log("Guardado correctamente");
+      console.error(error);
+      document.getElementById("msg").innerText = "Error en el servidor";
+      return;
     }
+
+    if (!data) {
+      document.getElementById("msg").innerText = "Usuario o contraseña incorrectos";
+      return;
+    }
+
+    // ✔ Usuario válido
+    alert("Bienvenido " + data.Nombre);
+
+    // Redirigir a la app
+    window.location.href = "app.html";
   }
 </script>
 
