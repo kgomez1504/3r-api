@@ -146,6 +146,31 @@ app.get("/api/clientes", async (req, res) => {
 });
 
 // =====================================
+//   RUTA: NOTAS DE PEDIDO
+// =====================================
+app.get("/api/notas-pedido", async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request().query(`
+      SELECT
+        t.*,
+        CONVERT(VARCHAR(10), t.FechaPedido, 23) AS FechaPedidoFormateada
+      FROM dbo.VenCuboArticuloxNotaPedido3R t
+      WHERE t.EmpresaId = 22
+      ORDER BY t.FechaPedido ASC
+    `);
+    const data = result.recordset.map(row => {
+      row.FechaPedido = row.FechaPedidoFormateada;
+      delete row.FechaPedidoFormateada;
+      return row;
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("ERROR API NOTAS PEDIDO:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+// =====================================
 //   INICIAR SERVIDOR
 // =====================================
 const PORT = 4000;
