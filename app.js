@@ -170,6 +170,33 @@ app.get("/api/notas-pedido", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// =====================================
+//   RUTA: ORDENES DE COMPRA
+// =====================================
+app.get("/api/orden_compra", async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request().query(`
+      SELECT
+        t.*,
+        CONVERT(VARCHAR(10), t.Fecha, 23) AS FechaFormateada
+      FROM dbo.ComCuboArticuloxOrdenCompra3R t
+      WHERE t.EmpresaId = 22
+      ORDER BY t.Fecha ASC
+    `);
+    const data = result.recordset.map(row => {
+      row.Fecha = row.FechaFormateada;
+      delete row.FechaFormateada;
+      return row;
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("ERROR API NOTAS PEDIDO:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // =====================================
 //   INICIAR SERVIDOR
 // =====================================
