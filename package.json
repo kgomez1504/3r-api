@@ -1,18 +1,27 @@
 {
-  "name": "api-stock",
+  "name": "threer-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "API para Render - Gestión de artículos, stock, clientes",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
-  "keywords": [],
+  "keywords": [
+    "api",
+    "express",
+    "mssql",
+    "render"
+  ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "mssql": "^12.2.1"
+    "express": "^4.18.0",
+    "mssql": "^9.0.0",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
