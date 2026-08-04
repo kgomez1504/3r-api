@@ -104,9 +104,9 @@ app.get("/api/articulos", async (req, res) => {
       WHERE EmpresaId = 22
     `;
 
-    // Si hay filtro por columna_f (KROHNE, etc)
+    // Si hay filtro por MarcaArticulo (KROHNE, etc)
     if (filtro) {
-      query += ` AND columna_f = '${filtro.toUpperCase()}'`;
+      query += ` AND MarcaArticulo = '${filtro.toUpperCase()}'`;
     }
 
     const result = await pool.request().query(query);
@@ -249,6 +249,7 @@ app.get("/api/orden_compra", async (req, res) => {
 // ============================================
 //   RUTA NUEVA: ARTICULOS KROHNE SOLO
 //   (Especialmente optimizada para Google Sheets)
+//   USO: /api/articulos/krohne
 // ============================================
 app.get("/api/articulos/krohne", async (req, res) => {
   try {
@@ -259,7 +260,7 @@ app.get("/api/articulos/krohne", async (req, res) => {
       SELECT TOP ${limit} *
       FROM dbo.AlmCuboArticulos3R
       WHERE EmpresaId = 22
-        AND columna_f = 'KROHNE'
+        AND MarcaArticulo = 'KROHNE'
     `);
 
     res.json(result.recordset);
@@ -278,6 +279,7 @@ app.listen(PORT, () => {
   console.log(`✅ API escuchando en puerto ${PORT}`);
   console.log(`📊 Compresión GZIP activada`);
   console.log(`🔗 Pool de conexiones configurado`);
+  console.log(`🔗 Endpoint KROHNE disponible: /api/articulos/krohne`);
 });
 
 // Manejo de errores global
