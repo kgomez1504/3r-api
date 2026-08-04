@@ -66,7 +66,7 @@ app.get("/api/test-db", async (req, res) => {
 app.get("/api/stock", async (req, res) => {
   try {
     const pool = await getPool();
-    const limit = req.query.limit || 5000; // Limite por defecto
+    const limit = req.query.limit || 50000; // Limite por defecto
 
     const result = await pool.request().query(`
       SELECT TOP ${limit}
